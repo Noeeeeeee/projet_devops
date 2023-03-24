@@ -10,5 +10,8 @@ terraform {
 
 # On demande à Terraform d'utiliser le provider téléchargé à l'instant
 provider "openstack" {
-  cloud = "tp_note_projet"
+  cloud = "tp_projet"
 }
+
+
+
