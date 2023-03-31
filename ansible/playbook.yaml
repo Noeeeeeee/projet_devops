@@ -1,0 +1,47 @@
+- name: Project_playbook
+  hosts: servers
+  become: false
+  any_errors_fatal: true
+  vars_files:
+    - "{{ playbook_dir }}/vars/vars_app.yaml"
+  tasks:
+    - name: set nameservers
+      become: true
+      ansible.builtin.lineinfile:
+        path: "/etc/resolv.conf"
+        line: "nameserver 8.8.8.8"
+    - name: update apt
+      become: true
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Installation de Docker
+      become: true
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Installation de Docker Compose
+      become: true
+      apt:
+        name: docker-compose
+        state: present
+
+#GIT PART
+    - name: Installation de Git
+      become: true
+      apt:
+        name: git
+        state: present
+
+    - name: Clone git repository #Pull si le dossier existe
+      become: true
+      git:
+        repo: https://github.com/Noeeeeeee/projet_devops.git
+        update: yes
+        dest: /home/project
+        version: main
+
+
+
+
