@@ -1,0 +1,68 @@
+version: '3'
+
+services:
+  db_alpha:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: alpha
+      MYSQL_USER: alpha, beta
+      MYSQL_PASSWORD: password
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+  db_beta:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: beta
+      MYSQL_USER: alpha, beta
+      MYSQL_PASSWORD: password
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+
+  nextcloud:
+    image: nextcloud
+    restart: always
+    depends_on:
+      - db_alpha
+      - db_beta
+    ports:
+      - "8080:80"
+    environment:
+      NEXTCLOUD_ADMIN_USER: admin
+      NEXTCLOUD_ADMIN_PASSWORD: password
+      MYSQL_DATABASE: alpha,beta
+      MYSQL_USER: alpha
+      MYSQL_PASSWORD: password
+      MYSQL_HOST: db_alpha,db_beta
+    volumes:
+      - nextcloud_data:/var/www/html
+
+
+  wordpress:
+    image: wordpress
+    restart: always
+    depends_on:
+      - db_alpha
+      - db_beta
+    ports:
+      - "8081:80"
+    environment:
+      WORDPRESS_DB_NAME: alpha,beta
+      WORDPRESS_DB_USER: alpha
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_DB_HOST: db_alpha,db_beta
+    volumes:
+      - wordpress_data:/var/www/html
+
+
+volumes:
+  db_data:
+  nextcloud_data:
+  wordpress_data:
