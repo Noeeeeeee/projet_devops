@@ -70,3 +70,43 @@ resource "openstack_networking_secgroup_rule_v2" "rule2" {
   direction = "ingress"
   ethertype = "IPv4"
 }
+
+resource "openstack_networking_secgroup_rule_v2" "wordpress_https_rule" {
+  security_group_id = openstack_networking_secgroup_v2.http.id
+  protocol = "tcp"
+  port_range_min = 443
+  port_range_max = 443
+  remote_ip_prefix = "0.0.0.0/0"
+  direction = "ingress"
+  ethertype = "IPv4"
+}
+
+resource "openstack_networking_secgroup_rule_v2" "nextcloud_http_rule" {
+  security_group_id = openstack_networking_secgroup_v2.http.id
+  protocol = "tcp"
+  port_range_min = 8080
+  port_range_max = 8080
+  remote_ip_prefix = "0.0.0.0/0"
+  direction = "ingress"
+  ethertype = "IPv4"
+}
+
+resource "openstack_networking_secgroup_rule_v2" "nextcloud_https_rule" {
+  security_group_id = openstack_networking_secgroup_v2.http.id
+  protocol = "tcp"
+  port_range_min = 8443
+  port_range_max = 8443
+  remote_ip_prefix = "0.0.0.0/0"
+  direction = "ingress"
+  ethertype = "IPv4"
+}
+
+resource "openstack_networking_secgroup_rule_v2" "mariadb_rule" {
+  security_group_id = openstack_networking_secgroup_v2.secgroup.id
+  protocol = "tcp"
+  port_range_min = 3306
+  port_range_max = 3306
+  remote_ip_prefix = "0.0.0.0/0"
+  direction = "ingress"
+  ethertype = "IPv4"
+}
