@@ -14,25 +14,44 @@
       become: true
       ansible.builtin.apt:
         update_cache: true
+      changed_when: false
+
+    - name: Vérifier si Docker est déjà installé
+      stat:
+        path: /usr/bin/docker
+      register: docker_installed
 
     - name: Installation de Docker
       become: true
       apt:
         name: docker.io
-        state: present
+        state: latest
+      when: not docker_installed.stat.exists
+
+    - name: Vérifier si Docker Compose est déjà installé
+      stat:
+        path: /usr/bin/docker-compose
+      register: docker_compose_installed
 
     - name: Installation de Docker Compose
       become: true
       apt:
         name: docker-compose
-        state: present
+        state: latest
+      when: not docker_compose_installed.stat.exists
 
 #GIT PART
+    - name: Vérifier si Git est déjà installé
+      stat:
+        path: /usr/bin/git
+      register: git_installed
+
     - name: Installation de Git
       become: true
       apt:
         name: git
-        state: present
+        state: latest
+      when: not git_installed.stat.exists
 
     - name: Clone git repository #Pull si le dossier existe
       become: true
@@ -41,6 +60,31 @@
         update: yes
         dest: /home/project
         version: main
+
+    - name: Install MariaDB Packages
+      become: true
+      apt:
+        name:
+          - mariadb-client
+          - mariadb-common
+          - mariadb-server
+        state: present
+        update_cache: yes
+
+
+
+    - name: Mise à jour des paquets Docker et Git
+      become: true
+      apt:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - docker.io
+        - docker-compose
+        - git
+
+
+
 
 
 

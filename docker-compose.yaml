@@ -8,9 +8,9 @@ services:
       MYSQL_ROOT_PASSWORD: example
       MYSQL_DATABASE: alpha
       MYSQL_USER: alpha, beta
-      MYSQL_PASSWORD: password
+      MYSQL_PASSWORD: password_alpha
     volumes:
-      - db_data:/var/lib/mysql
+      - db_alpha_data:/var/lib/mysql
     ports:
       - "3306:3306"
   db_beta:
@@ -20,9 +20,9 @@ services:
       MYSQL_ROOT_PASSWORD: example
       MYSQL_DATABASE: beta
       MYSQL_USER: alpha, beta
-      MYSQL_PASSWORD: password
+      MYSQL_PASSWORD: password_beta
     volumes:
-      - db_data:/var/lib/mysql
+      - db_beta_data:/var/lib/mysql
     ports:
       - "3307:3306"
 
@@ -36,11 +36,11 @@ services:
       - "8080:80"
     environment:
       NEXTCLOUD_ADMIN_USER: admin
-      NEXTCLOUD_ADMIN_PASSWORD: password
+      NEXTCLOUD_ADMIN_PASSWORD: password_admin
       MYSQL_DATABASE: alpha,beta
-      MYSQL_USER: alpha
-      MYSQL_PASSWORD: password
-      MYSQL_HOST: db_alpha,db_beta
+      MYSQL_USER: alpha, beta
+      MYSQL_PASSWORD: password_alpha, password_beta
+      MYSQL_HOST: db_alpha:3306,db_beta:3307
     volumes:
       - nextcloud_data:/var/www/html
 
@@ -55,14 +55,18 @@ services:
       - "8081:80"
     environment:
       WORDPRESS_DB_NAME: alpha,beta
-      WORDPRESS_DB_USER: alpha
-      WORDPRESS_DB_PASSWORD: password
-      WORDPRESS_DB_HOST: db_alpha,db_beta
+      WORDPRESS_DB_USER: alpha, beta
+      WORDPRESS_DB_PASSWORD: password_alpha, password_beta
+      WORDPRESS_DB_HOST: db_alpha:3306,db_beta:3307
     volumes:
       - wordpress_data:/var/www/html
 
 
 volumes:
-  db_data:
+  db_alpha_data:
+  db_beta_data:
   nextcloud_data:
   wordpress_data:
+
+
+
