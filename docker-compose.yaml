@@ -16,12 +16,12 @@ services:
     networks:
       internal_network:
         ipv4_address: 172.20.0.2
-      ports:
-        - "3306:3306"
-      command: [ "mysqld", "--init-file", "/tmp/create-users.sql" ]
-      entrypoint: >
-        bash -c "echo 'CREATE USER IF NOT EXISTS '\''alpha'\''@'\''%'\'' IDENTIFIED BY '\''password_alpha'\''; GRANT ALL PRIVILEGES ON alpha.* TO '\''alpha'\''@'\''%'\''; CREATE USER IF NOT EXISTS '\''beta'\''@'\''%'\'' IDENTIFIED BY '\''password_beta'\''; GRANT ALL PRIVILEGES ON alpha.* TO '\''beta'\''@'\''%'\'';' > /tmp/create-users.sql &&
-        exec docker-entrypoint.sh mysqld"
+    ports:
+      - "3306:3306"
+    command: [ "mysqld", "--init-file", "/tmp/create-users.sql" ]
+    entrypoint: >
+      bash -c "echo 'CREATE USER IF NOT EXISTS '\''alpha'\''@'\''%'\'' IDENTIFIED BY '\''password_alpha'\''; GRANT ALL PRIVILEGES ON alpha.* TO '\''alpha'\''@'\''%'\''; CREATE USER IF NOT EXISTS '\''beta'\''@'\''%'\'' IDENTIFIED BY '\''password_beta'\''; GRANT ALL PRIVILEGES ON alpha.* TO '\''beta'\''@'\''%'\'';' > /tmp/create-users.sql &&
+      exec docker-entrypoint.sh mysqld"
   db_beta:
     image: mariadb
     restart: always
@@ -37,12 +37,12 @@ services:
     networks:
       internal_network:
         ipv4_address: 172.20.0.3
-      ports:
-        - "3307:3306"
-      command: [ "mysqld", "--init-file", "/tmp/create-users.sql" ]
-      entrypoint: >
-        bash -c "echo 'CREATE USER IF NOT EXISTS '\''beta'\''@'\''%'\'' IDENTIFIED BY '\''password_beta'\''; GRANT ALL PRIVILEGES ON beta.* TO '\''beta'\''@'\''%'\''; CREATE USER IF NOT EXISTS '\''alpha'\''@'\''%'\'' IDENTIFIED BY '\''password_alpha'\''; GRANT ALL PRIVILEGES ON beta.* TO '\''alpha'\''@'\''%'\'';' > /tmp/create-users.sql &&
-        exec docker-entrypoint.sh mysqld"
+    ports:
+      - "3307:3306"
+    command: [ "mysqld", "--init-file", "/tmp/create-users.sql" ]
+    entrypoint: >
+      bash -c "echo 'CREATE USER IF NOT EXISTS '\''beta'\''@'\''%'\'' IDENTIFIED BY '\''password_beta'\''; GRANT ALL PRIVILEGES ON beta.* TO '\''beta'\''@'\''%'\''; CREATE USER IF NOT EXISTS '\''alpha'\''@'\''%'\'' IDENTIFIED BY '\''password_alpha'\''; GRANT ALL PRIVILEGES ON beta.* TO '\''alpha'\''@'\''%'\'';' > /tmp/create-users.sql &&
+      exec docker-entrypoint.sh mysqld"
 
   nextcloud:
     image: nextcloud
