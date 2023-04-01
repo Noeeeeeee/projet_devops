@@ -20,8 +20,13 @@ services:
       - "3306:3306"
     command: [ "mysqld", "--init-file", "/tmp/create-users.sql" ]
     entrypoint: >
-      bash -c "echo 'CREATE USER IF NOT EXISTS '\''alpha'\''@'\''%'\'' IDENTIFIED BY '\''password_alpha'\''; GRANT ALL PRIVILEGES ON alpha.* TO '\''alpha'\''@'\''%'\''; CREATE USER IF NOT EXISTS '\''beta'\''@'\''%'\'' IDENTIFIED BY '\''password_beta'\''; GRANT ALL PRIVILEGES ON alpha.* TO '\''beta'\''@'\''%'\''; FLUSH PRIVILEGES;' > /tmp/create-users.sql &&
+      bash -c "echo \"CREATE USER 'alpha'@'%' IDENTIFIED BY 'password_alpha'; \
+      GRANT ALL PRIVILEGES ON alpha.* TO 'alpha'@'%'; \
+      CREATE USER 'beta'@'%' IDENTIFIED BY 'password_beta'; \
+      GRANT ALL PRIVILEGES ON alpha.* TO 'beta'@'%'; \
+      FLUSH PRIVILEGES;\" > /tmp/create-users.sql && \
       exec docker-entrypoint.sh mysqld"
+
   db_beta:
     image: mariadb
     restart: always
@@ -41,8 +46,13 @@ services:
       - "3307:3306"
     command: [ "mysqld", "--init-file", "/tmp/create-users.sql" ]
     entrypoint: >
-      bash -c "echo 'CREATE USER IF NOT EXISTS '\''beta'\''@'\''%'\'' IDENTIFIED BY '\''password_beta'\''; GRANT ALL PRIVILEGES ON beta.* TO '\''beta'\''@'\''%'\''; CREATE USER IF NOT EXISTS '\''alpha'\''@'\''%'\'' IDENTIFIED BY '\''password_alpha'\''; GRANT ALL PRIVILEGES ON beta.* TO '\''alpha'\''@'\''%'\''; FLUSH PRIVILEGES;' > /tmp/create-users.sql &&
+      bash -c "echo \"CREATE USER 'beta'@'%' IDENTIFIED BY 'password_beta'; \
+      GRANT ALL PRIVILEGES ON beta.* TO 'beta'@'%'; \
+      CREATE USER 'alpha'@'%' IDENTIFIED BY 'password_alpha'; \
+      GRANT ALL PRIVILEGES ON alpha.* TO 'alpha'@'%'; \
+      FLUSH PRIVILEGES;\" > /tmp/create-users.sql && \
       exec docker-entrypoint.sh mysqld"
+  
 
   nextcloud:
     image: nextcloud
