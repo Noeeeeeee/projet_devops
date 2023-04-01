@@ -25,7 +25,7 @@ services:
       CREATE USER 'beta'@'%' IDENTIFIED BY 'password_beta'; \
       GRANT ALL PRIVILEGES ON alpha.* TO 'beta'@'%'; \
       FLUSH PRIVILEGES;\" > /tmp/create-users.sql && \
-      exec docker-entrypoint.sh mysqld"
+      exec /usr/local/bin/docker-entrypoint.sh mysqld"
 
   db_beta:
     image: mariadb
@@ -51,7 +51,7 @@ services:
       CREATE USER 'alpha'@'%' IDENTIFIED BY 'password_alpha'; \
       GRANT ALL PRIVILEGES ON alpha.* TO 'alpha'@'%'; \
       FLUSH PRIVILEGES;\" > /tmp/create-users.sql && \
-      exec docker-entrypoint.sh mysqld"
+      exec /usr/local/bin/docker-entrypoint.sh mysqld"
   
 
   nextcloud:
