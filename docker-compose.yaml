@@ -9,24 +9,16 @@ services:
       MYSQL_DATABASE: alpha
       MYSQL_USER: alpha
       MYSQL_PASSWORD: password_alpha
-      MYSQL_USER2: beta
-      MYSQL_PASSWORD2: password_beta
+
     volumes:
       - db_alpha_data:/var/lib/mysql
+      - ./db_alpha_init.sql:/docker-entrypoint-initdb.d/db_alpha_init.sql
     networks:
       internal_network:
         ipv4_address: 172.30.0.2
     ports:
       - "3306:3306"
-    command: [ "mysqld", "--init-file", "/tmp/create-users.sql" ]
-    entrypoint: >
-      bash -c "echo \"CREATE USER 'alpha'@'%' IDENTIFIED BY 'password_alpha'; \
-      GRANT ALL PRIVILEGES ON alpha.* TO 'alpha'@'%'; \
-      FLUSH PRIVILEGES;\" > /tmp/create-user-alpha.sql; \
-      echo \"CREATE USER 'beta'@'%' IDENTIFIED BY 'password_beta'; \
-      GRANT ALL PRIVILEGES ON alpha.* TO 'beta'@'%'; \
-      FLUSH PRIVILEGES;\" > /tmp/create-user-beta.sql; \
-      /usr/local/bin/docker-entrypoint.sh mysqld --init-file /tmp/create-user-alpha.sql --init-file /tmp/create-user-beta.sql"
+
 
   db_beta:
     image: mariadb
@@ -36,24 +28,15 @@ services:
       MYSQL_DATABASE: beta
       MYSQL_USER: beta
       MYSQL_PASSWORD: password_beta
-      MYSQL_USER2: alpha
-      MYSQL_PASSWORD2: password_alpha
     volumes:
       - db_beta_data:/var/lib/mysql
+      - ./db_beta_init.sql:/docker-entrypoint-initdb.d/db_beta_init.sql
     networks:
       internal_network:
         ipv4_address: 172.30.0.3
     ports:
       - "3307:3306"
-    command: [ "mysqld", "--init-file", "/tmp/create-users.sql" ]
-    entrypoint: >
-      bash -c "echo \"CREATE USER 'beta'@'%' IDENTIFIED BY 'password_beta'; \
-      GRANT ALL PRIVILEGES ON beta.* TO 'beta'@'%'; \
-      FLUSH PRIVILEGES;\" > /tmp/create-user-beta.sql; \
-      echo \"CREATE USER 'alpha'@'%' IDENTIFIED BY 'password_alpha'; \
-      GRANT ALL PRIVILEGES ON beta.* TO 'alpha'@'%'; \
-      FLUSH PRIVILEGES;\" > /tmp/create-user-alpha.sql; \
-      /usr/local/bin/docker-entrypoint.sh mysqld --init-file /tmp/create-user-beta.sql --init-file /tmp/create-user-alpha.sql"
+
   
 
   nextcloud:
