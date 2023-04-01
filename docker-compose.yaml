@@ -86,5 +86,11 @@ volumes:
   nextcloud_data:
   wordpress_data:
 
+networks:
+  internal_network:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
 
 
