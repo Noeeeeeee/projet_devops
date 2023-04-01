@@ -12,7 +12,7 @@ services:
     volumes:
       - db_alpha_data:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - "3308:3306"
   db_beta:
     image: mariadb
     restart: always
@@ -40,7 +40,7 @@ services:
       MYSQL_DATABASE: alpha,beta
       MYSQL_USER: alpha, beta
       MYSQL_PASSWORD: password_alpha, password_beta
-      MYSQL_HOST: db_alpha:3306,db_beta:3307
+      MYSQL_HOST: db_alpha:3308,db_beta:3307
     volumes:
       - nextcloud_data:/var/www/html
 
@@ -57,7 +57,7 @@ services:
       WORDPRESS_DB_NAME: alpha,beta
       WORDPRESS_DB_USER: alpha, beta
       WORDPRESS_DB_PASSWORD: password_alpha, password_beta
-      WORDPRESS_DB_HOST: db_alpha:3306,db_beta:3307
+      WORDPRESS_DB_HOST: db_alpha:3308,db_beta:3307
     volumes:
       - wordpress_data:/var/www/html
 
