@@ -22,10 +22,11 @@ services:
     entrypoint: >
       bash -c "echo \"CREATE USER 'alpha'@'%' IDENTIFIED BY 'password_alpha'; \
       GRANT ALL PRIVILEGES ON alpha.* TO 'alpha'@'%'; \
-      CREATE USER 'beta'@'%' IDENTIFIED BY 'password_beta'; \
+      FLUSH PRIVILEGES;\" > /tmp/create-user-alpha.sql; \
+      echo \"CREATE USER 'beta'@'%' IDENTIFIED BY 'password_beta'; \
       GRANT ALL PRIVILEGES ON alpha.* TO 'beta'@'%'; \
-      FLUSH PRIVILEGES;\" > /tmp/create-users.sql; \
-        /usr/local/bin/docker-entrypoint.sh mysqld"
+      FLUSH PRIVILEGES;\" > /tmp/create-user-beta.sql; \
+      /usr/local/bin/docker-entrypoint.sh mysqld --init-file /tmp/create-user-alpha.sql --init-file /tmp/create-user-beta.sql"
 
   db_beta:
     image: mariadb
@@ -48,10 +49,11 @@ services:
     entrypoint: >
       bash -c "echo \"CREATE USER 'beta'@'%' IDENTIFIED BY 'password_beta'; \
       GRANT ALL PRIVILEGES ON beta.* TO 'beta'@'%'; \
-      CREATE USER 'alpha'@'%' IDENTIFIED BY 'password_alpha'; \
-      GRANT ALL PRIVILEGES ON alpha.* TO 'alpha'@'%'; \
-      FLUSH PRIVILEGES;\" > /tmp/create-users.sql; \
-        /usr/local/bin/docker-entrypoint.sh mysqld"
+      FLUSH PRIVILEGES;\" > /tmp/create-user-beta.sql; \
+      echo \"CREATE USER 'alpha'@'%' IDENTIFIED BY 'password_alpha'; \
+      GRANT ALL PRIVILEGES ON beta.* TO 'alpha'@'%'; \
+      FLUSH PRIVILEGES;\" > /tmp/create-user-alpha.sql; \
+      /usr/local/bin/docker-entrypoint.sh mysqld --init-file /tmp/create-user-beta.sql --init-file /tmp/create-user-alpha.sql"
   
 
   nextcloud:
