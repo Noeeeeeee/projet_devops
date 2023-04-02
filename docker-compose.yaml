@@ -76,10 +76,10 @@ services:
     ports:
       - "8081:80"
     environment:
-      WORDPRESS_DB_NAME_ALPHA: alpha
-      WORDPRESS_DB_USER_ALPHA: alpha
-      WORDPRESS_DB_PASSWORD_ALPHA: password_alpha
-      WORDPRESS_DB_HOST_ALPHA: db_alpha:3307
+      WORDPRESS_DB_NAME: alpha
+      WORDPRESS_DB_USER: alpha
+      WORDPRESS_DB_PASSWORD: password_alpha
+      WORDPRESS_DB_HOST: db_alpha:3307
     volumes:
       - wordpress_data:/var/www/html
 
