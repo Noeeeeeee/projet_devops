@@ -4,13 +4,13 @@ global:
 scrape_configs:
   - job_name: 'prometheus'
     static_configs:
-      - targets: ['185.34.141.163:8000'] #Apparemment c'est mieux de mettre une IP statique ou nom de domaine pour les targets
+      - targets: ['185.34.141.228:8000'] #Apparemment c'est mieux de mettre une IP statique ou nom de domaine pour les targets
   - job_name: 'wordpress'
     static_configs:
-      - targets: ['185.34.141.163:8000']
+      - targets: ['185.34.141.228:8000']
   - job_name: 'nextcloud'
     static_configs:
-      - targets: ['185.34.141.163:8000']
+      - targets: ['185.34.141.228:8000']
 
 # Commande pour lancer prometheus 
 # docker run --name prometheus -e --storage.tsdb.path=/prometheus -p 9090:9090 -d --restart always \
