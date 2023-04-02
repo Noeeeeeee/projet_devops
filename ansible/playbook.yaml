@@ -4,7 +4,45 @@
   any_errors_fatal: true
   vars_files:
     - "{{ playbook_dir }}/vars/vars_app.yaml"
+    - "{{ playbook_dir }}/vars/vault.yaml"
+
+
   tasks:
+  #La relation avec VAULT ne fonctionne pas, on a pas eu le temps de le finir...
+    -
+#    - name: Récupération de la clé SSH
+#      ansible.builtin.uri:
+#          url: "{{ vault_url }}/ui/vault/secrets/home/show/nochevassu/SSH_key"
+#          method: GET
+#          headers:
+#            X-Vault-Token: "{{ vault_token }}"
+#          return_content: yes
+#          status_code: 200
+#          body_format: json
+#      register: vault_result
+#      delegate_to: localhost
+#
+#    - name: Definition de SSH key variable
+#      set_fact:
+#        ssh_key: "{{ vault_result.json.data.data.ssh_key }}"
+#
+#    - name: Creation temporaire de SSH key file
+#      ansible.builtin.tempfile:
+#          state: file
+#      register: temp_ssh_key_file
+#      delegate_to: localhost
+#
+#    - name: Remplissage de la SSH key dans le fichier temporaire
+#      ansible.builtin.copy:
+#        content: "{{ ssh_key }}"
+#        dest: "{{ temp_ssh_key_file.path }}"
+#        mode: "0600"
+#      delegate_to: localhost
+#
+#    - name: Definition de ansible_ssh_private_key_file variable
+#      set_fact:
+#        ansible_ssh_private_key_file: "{{ temp_ssh_key_file.path }}"
+
     - name: set nameservers
       become: true
       ansible.builtin.lineinfile:
@@ -86,19 +124,81 @@
 
 
     - name: Vérifier si Go est déjà installé
-      stat:
-        path: /usr/bin/go
-        register: go_installed
+      find:
+        paths: /usr/bin
+        patterns: "go"
+      register: go_installed
 
 
-    - name: Installation de GO
+
+    - name: Installation de Go
       become: true
       apt:
         name: golang
         state: present
         update_cache: yes
-        when: not go_installed.stat.exists
-#
+      when: go_installed.matched == 0
+
+
+
+
+
+- name: Installation de Prometheus et de Node Exporter
+  hosts: all
+  become: true
+  vars:
+    - prometheus_version: "2.33.0"
+    - node_exporter_version: "1.2.2"
+  tasks:
+    - name: Installation des dependances
+      apt:
+        name: [ wget, curl, tar ]
+        state: present
+
+    - name: Téléchargement de prometheus
+      get_url:
+        url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz"
+        dest: "/tmp/prometheus.tar.gz"
+
+    - name: Extraction de Prometheus
+      unarchive:
+        src: "/tmp/prometheus.tar.gz"
+        dest: "/opt"
+        remote_src: true
+        creates: "/opt/prometheus-{{ prometheus_version }}"
+
+    - name: Téléchargement de Node Exporter
+      get_url:
+        url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+        dest: "/tmp/node_exporter.tar.gz"
+
+    - name: Extraction de Node Exporter
+      unarchive:
+        src: "/tmp/node_exporter.tar.gz"
+        dest: "/usr/local/bin"
+        remote_src: true
+        creates: "/usr/local/bin/node_exporter-{{ node_exporter_version }}"
+
+    - name: Creation de Node Exporter Systemd Service file
+      copy:
+        src: node_exporter.service
+        dest: /etc/systemd/system/node_exporter.service
+        mode: 0644
+      become: true
+
+    - name: Enable and start Node Exporter service
+      systemd:
+        name: node_exporter
+        enabled: true
+        state: started
+        daemon_reload: true
+      become: true
+
+
+
+
+
+
 
 
 

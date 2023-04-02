@@ -1,0 +1,5 @@
+# Configuration Vault
+vault_url: https://vault.edu.artheriom.fr
+vault_token: <hvs.CAESIKI0JGd1C3Q6lEApu4omZWBi23TNsCaQ411EXLENA9u6Gh4KHGh2cy5la2tVSVhzVDNUcXdpZXVsbmNxT1h0UWI>
+#On sait qu'il faut pas laisser le token comme ça mais pareil pas eu le temps de le crypter,
+#De toute façon il sert à rien puisqu'on a pas fini de faire la connexion avec VAULT dans le playbook
