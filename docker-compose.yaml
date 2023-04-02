@@ -42,7 +42,7 @@ services:
   nextcloud:
     build:
       context: .
-      dockerfile: nextcloud-dockerfile
+      dockerfile: dockerfile_nextcloud
     restart: always
     depends_on:
       - db_alpha
@@ -61,7 +61,9 @@ services:
 
 
   wordpress:
-    image: wordpress
+    build:
+      context: .
+      dockerfile: dockerfile_wordpress
     restart: always
     depends_on:
       - db_alpha
