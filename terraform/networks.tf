@@ -12,7 +12,7 @@ resource "openstack_networking_router_v2" "global" {
 
 # Internal Network
 resource "openstack_networking_network_v2" "network" {
-  name           = "dumbo-network"
+  name           = "projet-network"
   admin_state_up = "true"
 }
 
