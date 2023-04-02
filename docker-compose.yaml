@@ -41,8 +41,8 @@ services:
 
   nextcloud:
     build:
-    context: .
-    dockerfile: nextcloud-dockerfile
+      context: .
+      dockerfile: nextcloud-dockerfile
     restart: always
     depends_on:
       - db_alpha
