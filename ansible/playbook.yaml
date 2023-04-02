@@ -86,8 +86,8 @@
 
 
     - name: Vérifier si Go est déjà installé
-        stat:
-          path: /usr/bin/go
+      stat:
+        path: /usr/bin/go
         register: go_installed
 
 
