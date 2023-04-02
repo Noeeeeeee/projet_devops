@@ -4,5 +4,5 @@ variable "cidr" {
 
 variable "ip_address"{
     description = "The IP adress for the instance"
-    default = "185.34.141.163"
+    default = "185.34.141.228"
 }
