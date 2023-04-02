@@ -72,8 +72,6 @@
         state: present
         update_cache: yes
 
-
-
     - name: Mise à jour des paquets Docker et Git
       become: true
       apt:
