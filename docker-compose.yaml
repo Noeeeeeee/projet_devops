@@ -53,7 +53,7 @@ services:
       MYSQL_DATABASE: alpha,beta
       MYSQL_USER: alpha, beta
       MYSQL_PASSWORD: password_alpha, password_beta
-      MYSQL_HOST: db_alpha:3306,db_beta:3307
+      MYSQL_HOST: db_alpha:3307,db_beta:3308
     volumes:
       - nextcloud_data:/var/www/html
 
@@ -70,7 +70,7 @@ services:
       WORDPRESS_DB_NAME: alpha,beta
       WORDPRESS_DB_USER: alpha, beta
       WORDPRESS_DB_PASSWORD: password_alpha, password_beta
-      WORDPRESS_DB_HOST: db_alpha:3306,db_beta:3307
+      WORDPRESS_DB_HOST: db_alpha:3307,db_beta:3308
     volumes:
       - wordpress_data:/var/www/html
 

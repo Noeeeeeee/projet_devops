@@ -10,11 +10,12 @@
       ansible.builtin.lineinfile:
         path: "/etc/resolv.conf"
         line: "nameserver 8.8.8.8"
+
     - name: update apt
       become: true
       ansible.builtin.apt:
         update_cache: true
-      changed_when: false
+
 
     - name: Vérifier si Docker est déjà installé
       stat:
@@ -40,7 +41,7 @@
         state: latest
       when: not docker_compose_installed.stat.exists
 
-#GIT PART
+    #GIT PART
     - name: Vérifier si Git est déjà installé
       stat:
         path: /usr/bin/git
@@ -76,12 +77,12 @@
     - name: Mise à jour des paquets Docker et Git
       become: true
       apt:
-        name: "{{ item }}"
+        name:
+          - docker.io
+          - docker-compose
+          - git
         state: latest
-      with_items:
-        - docker.io
-        - docker-compose
-        - git
+
 
 
 
