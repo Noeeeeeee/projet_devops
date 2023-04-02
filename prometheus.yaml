@@ -1,0 +1,24 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['185.34.141.228:8000'] #Apparemment c'est mieux de mettre une IP statique ou nom de domaine pour les targets
+  - job_name: 'wordpress'
+    static_configs:
+      - targets: ['185.34.141.228:8000']
+  - job_name: 'nextcloud'
+    static_configs:
+      - targets: ['185.34.141.228:8000']
+
+# Commande pour lancer prometheus 
+# docker run --name prometheus -e --storage.tsdb.path=/prometheus -p 9090:9090 -d --restart always \
+#    -v $PWD/prometheus.yml:/etc/prometheus/prometheus.yml \
+#    prom/prometheus:latest 
+
+
+# Pour lancer prometheus 
+# ./prometheus --config.file=prometheus.yml
+
+# Il faut configurer le fait que Nextcloud et Wordpress envoient leurs métriques sur le port 8OOO 
