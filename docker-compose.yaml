@@ -61,8 +61,8 @@ services:
       MYSQL_USER_BETA: beta
       MYSQL_PASSWORD_BETA: password_beta
       MYSQL_HOST_BETA: db_beta:3308
-      volumes:
-        - nextcloud_data:/var/www/html
+    volumes:
+      - nextcloud_data:/var/www/html
 
 
   wordpress:
@@ -84,8 +84,8 @@ services:
       WORDPRESS_DB_USER_BETA: beta
       WORDPRESS_DB_PASSWORD_BETA: password_beta
       WORDPRESS_DB_HOST_BETA: db_beta:3308
-      volumes:
-        - wordpress_data:/var/www/html
+    volumes:
+      - wordpress_data:/var/www/html
 
 
 volumes:
