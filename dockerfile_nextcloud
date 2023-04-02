@@ -1,7 +1,7 @@
 FROM nextcloud
 
 RUN apt-get update && \
-    apt-get install -y vim curl mysql-client && \
+    apt-get install -y vim curl default-mysql-client && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     echo 'ServerName localhost' >> /etc/apache2/apache2.conf
