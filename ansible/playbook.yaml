@@ -72,14 +72,38 @@
         state: present
         update_cache: yes
 
-    - name: Mise à jour des paquets Docker et Git
+    - name: Vérifier si GnuPG est déjà installé
+      stat:
+        path: /usr/bin/gpg
+      register: gnupg_installed
+
+    - name: Installation de GnuPG
       become: true
       apt:
-        name:
-          - docker.io
-          - docker-compose
-          - git
+        name: gnupg
         state: latest
+      when: not gnupg_installed.stat.exists
+
+
+    - name: Vérifier si Go est déjà installé
+        stat:
+          path: /usr/bin/go
+        register: go_installed
+
+
+    - name: Installation de GO
+      become: true
+      apt:
+        name: golang
+        state: present
+        update_cache: yes
+        when: not go_installed.stat.exists
+#
+
+
+
+
+
 
 
 
